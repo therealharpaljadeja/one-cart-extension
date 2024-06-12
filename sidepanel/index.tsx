@@ -1,4 +1,4 @@
-import Popup from "./popup"
+import Popup from "./panel"
 import OnchainProviders from "./wagmi"
 
 export default function IndexPopup() {
