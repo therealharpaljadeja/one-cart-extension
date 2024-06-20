@@ -1,6 +1,12 @@
-import { formatEther, parseEther } from "viem"
+import { formatEther } from "viem"
 
-export default function NFT({ image, title, collectionTitle, price }) {
+export default function NFT({
+  image,
+  title,
+  collectionTitle,
+  price,
+  currency
+}) {
   return (
     <div style={{ display: "flex", width: "100%", marginBottom: "30px" }}>
       <div
@@ -31,7 +37,7 @@ export default function NFT({ image, title, collectionTitle, price }) {
           {collectionTitle}
         </p>
         <p style={{ fontSize: "14px", fontWeight: 600, color: "#222" }}>
-          {formatEther(parseEther(price) + parseEther("0.000777"))} ETH
+          {formatEther(BigInt(price))} {currency.trim()}
         </p>
       </div>
     </div>

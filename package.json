@@ -10,10 +10,16 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.10.0",
     "@tanstack/react-query": "^5.40.1",
+    "@zoralabs/protocol-sdk": "^0.6.0",
     "@zoralabs/zdk": "^2.4.0",
+    "framer-motion": "^11.2.10",
     "plasmo": "0.87.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",

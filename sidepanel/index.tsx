@@ -1,10 +1,14 @@
+import { ChakraProvider } from "@chakra-ui/react"
+
 import Popup from "./panel"
 import OnchainProviders from "./wagmi"
 
 export default function IndexPopup() {
   return (
     <OnchainProviders>
-      <Popup />
+      <ChakraProvider>
+        <Popup />
+      </ChakraProvider>
     </OnchainProviders>
   )
 }
