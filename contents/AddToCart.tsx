@@ -108,9 +108,9 @@ async function constructItemFromToken(token) {
     if (mintCosts.totalPurchaseCostCurrency && mintCosts.totalPurchaseCost) {
       item.price = mintCosts.totalPurchaseCost.toString()
       item.purchaseCurrency = mintCosts.totalPurchaseCostCurrency
-      item.currency = await getCurrencySymbol(
-        mintCosts.totalPurchaseCostCurrency
-      )
+      item.currency = (
+        await getCurrencySymbol(mintCosts.totalPurchaseCostCurrency)
+      ).trim()
       console.log("currency added")
     } else {
       item.price = mintCosts.totalCostEth.toString()
@@ -146,8 +146,6 @@ async function addToCart() {
 }
 
 export default function AddToCart() {
-  const [cart, setCart] = useStorage("cart")
-
   return (
     <div style={{ width: "100%", marginTop: "8px" }}>
       <button

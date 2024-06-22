@@ -1,6 +1,6 @@
 {
   "name": "zora-add-to-cart",
-  "displayName": "Zora add to cart",
+  "displayName": "Zora Cart",
   "version": "0.0.1",
   "description": "An extension that let's you mint multiple Zora NFTs",
   "author": "Harpalsinh Jadeja",
@@ -10,6 +10,7 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
     "@chakra-ui/next-js": "^2.2.0",
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
