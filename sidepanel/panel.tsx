@@ -37,7 +37,7 @@ export default function Panel() {
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const [cart, setCart] = useState([])
-  const { writeContracts } = useWriteContracts()
+  const { writeContractsAsync, status } = useWriteContracts()
   const toast = useToast()
 
   async function init() {
@@ -110,7 +110,7 @@ export default function Panel() {
 
         if (address) {
           // @ts-expect-error
-          writeContracts({
+          await writeContractsAsync({
             account: address,
             contracts: transactions,
             capabilities: {
@@ -169,7 +169,7 @@ export default function Panel() {
           <ModalBody padding={"20px"}>
             <Flex justifyContent={"center"} alignItems={"center"} gap="2">
               <Spinner size="xs" />
-              <Text size={"md"}>Opening Coinbase Smart Wallet</Text>
+              <Text size={"md"}>Awaiting Confirmation</Text>
             </Flex>
           </ModalBody>
         </ModalContent>
