@@ -14,7 +14,7 @@ import {
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
 import zorb from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import {
   useAccount,
   useChainId,
@@ -28,17 +28,24 @@ import ERC20Abi from "~/utils/ERC20Abi"
 
 import CoinBaseButton from "./components/Button"
 import NFT from "./components/NFT"
+import SuccessScreen from "./components/SuccessScreen"
 
 export default function Panel() {
-  const { connectors, connect, isSuccess } = useConnect()
+  const { connectors, connect } = useConnect()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { disconnect } = useDisconnect()
   const { isConnected, address } = useAccount()
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const [cart, setCart] = useState([])
-  const { writeContractsAsync, status } = useWriteContracts()
+  const { writeContractsAsync } = useWriteContracts()
+  const [showSuccessScreen, setShowSuccessScreen] = useState(false)
   const toast = useToast()
+
+  const onCloseSuccess = useCallback(() => {
+    setShowSuccessScreen(false)
+    clearCart()
+  }, [])
 
   async function init() {
     const { cart } = await chrome.storage.sync.get("cart")
@@ -119,6 +126,8 @@ export default function Panel() {
               }
             }
           })
+
+          setShowSuccessScreen(true)
         }
       } catch (error) {
         console.error(error)
@@ -145,6 +154,8 @@ export default function Panel() {
       cart: modifiedCart
     })
   }
+
+  if (showSuccessScreen) return <SuccessScreen onClose={onCloseSuccess} />
 
   return (
     <div
