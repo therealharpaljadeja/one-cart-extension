@@ -15,6 +15,7 @@ import { createCollectorClient } from "@zoralabs/protocol-sdk"
 import zorb from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
 import { useCallback, useEffect, useState } from "react"
+import { MdOutlineShoppingCart } from "react-icons/md"
 import {
   useAccount,
   useChainId,
@@ -240,8 +241,10 @@ export default function Panel() {
                 Clear Cart
               </Button> */}
               <Button
-                padding={"12px 16px"}
+                padding={"25px 16px"}
                 width={"100%"}
+                fontSize={"16px"}
+                leftIcon={<MdOutlineShoppingCart />}
                 colorScheme={"green"}
                 onClick={checkout}>
                 Checkout
