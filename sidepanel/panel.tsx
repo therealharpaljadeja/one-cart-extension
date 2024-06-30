@@ -124,6 +124,11 @@ export default function Panel() {
             capabilities: {
               paymasterService: {
                 url: "https://cdp-paymaster-proxy.vercel.app/api/paymaster"
+              },
+              auxillaryFunds: {
+                8453: {
+                  supported: true
+                }
               }
             }
           })
