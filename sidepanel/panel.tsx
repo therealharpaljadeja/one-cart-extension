@@ -11,6 +11,12 @@ import {
   useToast,
   VStack
 } from "@chakra-ui/react"
+import {
+  chains,
+  createGlideConfig,
+  createSession,
+  currencies
+} from "@paywithglide/glide-js"
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
 import zorb from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
@@ -23,13 +29,18 @@ import {
   useDisconnect,
   usePublicClient
 } from "wagmi"
-import { useWriteContracts } from "wagmi/experimental"
+import { useSendCalls, useWriteContracts } from "wagmi/experimental"
 
 import ERC20Abi from "~/utils/ERC20Abi"
 
 import CoinBaseButton from "./components/Button"
 import NFT from "./components/NFT"
 import SuccessScreen from "./components/SuccessScreen"
+
+export const config = createGlideConfig({
+  projectId: "55432225-f9f0-4a04-b3d4-88e71ef2cdad",
+  chains: [chains.base]
+})
 
 export default function Panel() {
   const { connectors, connect } = useConnect()
@@ -39,7 +50,8 @@ export default function Panel() {
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const [cart, setCart] = useState([])
-  const { writeContractsAsync } = useWriteContracts()
+  // const { writeContractsAsync } = useWriteContracts()
+  const { sendCallsAsync } = useSendCalls()
   const [showSuccessScreen, setShowSuccessScreen] = useState(false)
   const toast = useToast()
 
@@ -100,27 +112,29 @@ export default function Panel() {
             mintType: "1155"
           })
 
-          if (item.purchaseCurrency) {
-            transactions.push({
-              account: address,
-              address: item.purchaseCurrency,
-              functionName: "approve",
-              abi: ERC20Abi,
-              args: [
-                "0x777777E8850d8D6d98De2B5f64fae401F96eFF31", // ERC20Minter
-                item.price
-              ]
-            })
+          const { unsignedTransaction } = await createSession(config, {
+            chainId: chains.base.id,
+            account: address,
+            paymentCurrency: currencies.usdc,
+
+            ...parameters
+          })
+
+          console.log(unsignedTransaction)
+
+          let transaction = {
+            to: unsignedTransaction.to,
+            data: unsignedTransaction.input,
+            value: unsignedTransaction.value
           }
 
-          transactions.push(parameters)
+          transactions.push(transaction)
         }
 
         if (address) {
-          // @ts-expect-error
-          await writeContractsAsync({
+          await sendCallsAsync({
             account: address,
-            contracts: transactions,
+            calls: transactions,
             capabilities: {
               paymasterService: {
                 url: "https://cdp-paymaster-proxy.vercel.app/api/paymaster"

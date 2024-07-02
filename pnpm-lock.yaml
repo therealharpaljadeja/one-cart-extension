@@ -23,6 +23,9 @@ importers:
       '@emotion/styled':
         specifier: ^11.11.5
         version: 11.11.5(@emotion/react@11.11.4(@types/react@18.2.48)(react@18.2.0))(@types/react@18.2.48)(react@18.2.0)
+      '@paywithglide/glide-js':
+        specifier: ^0.9.4
+        version: 0.9.4(bufferutil@4.0.8)(typescript@5.3.3)
       '@plasmohq/messaging':
         specifier: ^0.6.2
         version: 0.6.2(react@18.2.0)
@@ -2348,6 +2351,9 @@ packages:
     engines: {node: '>= 12.0.0'}
     peerDependencies:
       '@parcel/core': ^2.9.3
+
+  '@paywithglide/glide-js@0.9.4':
+    resolution: {integrity: sha512-1StAz2Wxfj8VbG38Ry07bmmwZLk5izV416RyG8Rkyb7WI8pKzDyZb18V+HMDMMU9/kNlMdxzffwejApirC35Nw==}
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -9950,6 +9956,15 @@ snapshots:
       '@parcel/types': 2.9.3(@parcel/core@2.9.3)
       '@parcel/utils': 2.9.3
       nullthrows: 1.1.1
+
+  '@paywithglide/glide-js@0.9.4(bufferutil@4.0.8)(typescript@5.3.3)':
+    dependencies:
+      viem: 2.13.7(bufferutil@4.0.8)(typescript@5.3.3)
+    transitivePeerDependencies:
+      - bufferutil
+      - typescript
+      - utf-8-validate
+      - zod
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
