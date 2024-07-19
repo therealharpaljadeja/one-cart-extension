@@ -15,7 +15,8 @@ import {
   chains,
   createGlideConfig,
   createSession,
-  currencies
+  currencies,
+  waitForSession
 } from "@paywithglide/glide-js"
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
 import zorb from "data-base64:~/assets/icon.png"
@@ -50,7 +51,6 @@ export default function Panel() {
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const [cart, setCart] = useState([])
-  // const { writeContractsAsync } = useWriteContracts()
   const { sendCallsAsync } = useSendCalls()
   const [showSuccessScreen, setShowSuccessScreen] = useState(false)
   const toast = useToast()
@@ -112,13 +112,16 @@ export default function Panel() {
             mintType: "1155"
           })
 
-          const { unsignedTransaction } = await createSession(config, {
-            chainId: chains.base.id,
-            account: address,
-            paymentCurrency: currencies.usdc,
+          const { unsignedTransaction, sessionId } = await createSession(
+            config,
+            {
+              chainId: chains.base.id,
+              account: address,
+              paymentCurrency: currencies.usdc,
 
-            ...parameters
-          })
+              ...parameters
+            }
+          )
 
           console.log(unsignedTransaction)
 
@@ -146,6 +149,8 @@ export default function Panel() {
               }
             }
           })
+
+          await waitForSession(config, sessionId)
 
           setShowSuccessScreen(true)
         }
