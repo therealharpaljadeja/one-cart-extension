@@ -41,7 +41,6 @@
   "manifest": {
     "permissions": [
       "tabs",
-      "activeTab",
       "webRequest"
     ],
     "host_permissions": [

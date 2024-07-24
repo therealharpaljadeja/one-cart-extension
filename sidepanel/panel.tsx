@@ -1,6 +1,8 @@
 import {
   Button,
   Flex,
+  HStack,
+  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -19,6 +21,7 @@ import {
   waitForSession
 } from "@paywithglide/glide-js"
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
+import glide from "data-base64:~/assets/glide.svg"
 import zorb from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
 import { useCallback, useEffect, useState } from "react"
@@ -118,7 +121,6 @@ export default function Panel() {
               chainId: chains.base.id,
               account: address,
               paymentCurrency: currencies.usdc,
-
               ...parameters
             }
           )
@@ -149,8 +151,6 @@ export default function Panel() {
               }
             }
           })
-
-          await waitForSession(config, sessionId)
 
           setShowSuccessScreen(true)
         }
@@ -203,9 +203,19 @@ export default function Panel() {
         <ModalOverlay />
         <ModalContent>
           <ModalBody padding={"20px"}>
-            <Flex justifyContent={"center"} alignItems={"center"} gap="2">
-              <Spinner size="xs" />
-              <Text size={"md"}>Awaiting Confirmation</Text>
+            <Flex
+              direction={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap="2">
+              <Flex justifyContent={"center"} alignItems={"center"} gap="2">
+                <Spinner size="xs" />
+                <Text size={"md"}>Awaiting Confirmation</Text>
+              </Flex>
+              <HStack>
+                <Text>Powered by </Text>
+                <Image width={"45px"} src={glide} />
+              </HStack>
             </Flex>
           </ModalBody>
         </ModalContent>
