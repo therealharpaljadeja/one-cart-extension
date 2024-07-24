@@ -39,12 +39,6 @@
     "typescript": "5.3.3"
   },
   "manifest": {
-    "permissions": [
-      "tabs",
-      "webRequest"
-    ],
-    "host_permissions": [
-      "https://*/*"
-    ]
+    "permissions": []
   }
 }
