@@ -22,7 +22,8 @@ import {
 } from "@paywithglide/glide-js"
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
 import glide from "data-base64:~/assets/glide.svg"
-import zorb from "data-base64:~/assets/icon.png"
+import logoBlack from "data-base64:~/assets/icon_black.png"
+import logo from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
 import { useCallback, useEffect, useState } from "react"
 import { MdOutlineShoppingCart } from "react-icons/md"
@@ -225,9 +226,9 @@ export default function Panel() {
         alignItems={"center"}
         width={"100%"}
         gap={"6"}>
-        <Flex gap="2" marginBottom={"20px"}>
-          <img width="24px" src={zorb} />
-          <img width="60px" src={zora} />
+        <Flex gap="2" alignItems={"center"} marginBottom={"20px"}>
+          <img width="24px" src={logoBlack} />
+          <Text fontSize="14px">ZoraCart</Text>
         </Flex>
         {cart ? (
           cart.length ? (

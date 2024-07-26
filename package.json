@@ -1,7 +1,7 @@
 {
   "name": "zora-add-to-cart",
   "displayName": "Zora Cart",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "An extension that let's you mint multiple Zora NFTs",
   "author": "Harpalsinh Jadeja",
   "scripts": {
