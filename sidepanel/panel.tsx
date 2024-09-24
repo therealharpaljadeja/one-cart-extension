@@ -116,6 +116,7 @@ export default function Panel() {
             mintType: "1155"
           })
 
+          // Glide Code
           const { unsignedTransaction, sessionId } = await createSession(
             config,
             {
@@ -134,6 +135,7 @@ export default function Panel() {
             value: unsignedTransaction.value
           }
 
+          // Glide transactions
           transactions.push(transaction)
         }
 

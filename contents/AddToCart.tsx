@@ -80,25 +80,36 @@ async function getCurrencySymbol(currencyAddress: Address) {
 }
 
 async function constructItemFromToken(token) {
-  console.log(token)
   if (token) {
-    let imageRenderer = document.querySelector(
-      'img[data-testid="media-renderer"]'
-    )
-
-    let imageContentUrl = imageRenderer.src
+    let imageContentUrl = `https://magic.decentralized-content.com/ipfs/${token.token.image.url.split("/")[2]}`
 
     // let token = await collectorClient.getToken({
     //   tokenContract: tokenToCSSVar.
     // })
-    const mintCosts = await collectorClient.getMintCosts({
-      // 1155 contract address
-      collection: token.token.collectionAddress,
-      // 1155 token id
-      tokenId: token.token.tokenId,
-      quantityMinted: 1,
-      mintType: "1155"
+
+    console.log("Token", token)
+
+    const { prepareMint } = await collectorClient.getToken({
+      tokenContract: token.token.collectionAddress,
+      mintType: "1155",
+      tokenId: token.token.tokenId
     })
+
+    const { costs } = await prepareMint({
+      quantityToMint: 1,
+      minterAccount: "0x0000000000000000000000000000000000000000"
+    })
+
+    console.log("Costs", costs)
+
+    // const mintCosts = await collectorClient.getMintCosts({
+    //   // 1155 contract address
+    //   collection: token.token.collectionAddress,
+    //   // 1155 token id
+    //   tokenId: token.token.tokenId,
+    //   quantityMinted: 1,
+    //   mintType: "1155"
+    // })
 
     let item = {
       image: imageContentUrl,
@@ -109,15 +120,15 @@ async function constructItemFromToken(token) {
       tokenId: token.token.tokenId
     }
 
-    if (mintCosts.totalPurchaseCostCurrency && mintCosts.totalPurchaseCost) {
-      item.price = mintCosts.totalPurchaseCost.toString()
-      item.purchaseCurrency = mintCosts.totalPurchaseCostCurrency
+    if (costs.totalPurchaseCostCurrency && costs.totalPurchaseCost) {
+      item.price = costs.totalPurchaseCost.toString()
+      item.purchaseCurrency = costs.totalPurchaseCostCurrency
       item.currency = (
-        await getCurrencySymbol(mintCosts.totalPurchaseCostCurrency)
+        await getCurrencySymbol(costs.totalPurchaseCostCurrency)
       ).trim()
       console.log("currency added")
     } else {
-      item.price = mintCosts.totalCostEth.toString()
+      item.price = costs.totalCostEth.toString()
       item.currency = "ETH"
     }
 
