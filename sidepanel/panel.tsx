@@ -1,6 +1,8 @@
 import {
   Button,
   Flex,
+  HStack,
+  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -15,10 +17,13 @@ import {
   chains,
   createGlideConfig,
   createSession,
-  currencies
+  currencies,
+  waitForSession
 } from "@paywithglide/glide-js"
 import { createCollectorClient } from "@zoralabs/protocol-sdk"
-import zorb from "data-base64:~/assets/icon.png"
+import glide from "data-base64:~/assets/glide.svg"
+import logoBlack from "data-base64:~/assets/icon_black.png"
+import logo from "data-base64:~/assets/icon.png"
 import zora from "data-base64:~/assets/zora.png"
 import { useCallback, useEffect, useState } from "react"
 import { MdOutlineShoppingCart } from "react-icons/md"
@@ -50,7 +55,6 @@ export default function Panel() {
   const chainId = useChainId()
   const publicClient = usePublicClient()
   const [cart, setCart] = useState([])
-  // const { writeContractsAsync } = useWriteContracts()
   const { sendCallsAsync } = useSendCalls()
   const [showSuccessScreen, setShowSuccessScreen] = useState(false)
   const toast = useToast()
@@ -112,13 +116,15 @@ export default function Panel() {
             mintType: "1155"
           })
 
-          const { unsignedTransaction } = await createSession(config, {
-            chainId: chains.base.id,
-            account: address,
-            paymentCurrency: currencies.usdc,
-
-            ...parameters
-          })
+          const { unsignedTransaction, sessionId } = await createSession(
+            config,
+            {
+              chainId: chains.base.id,
+              account: address,
+              paymentCurrency: currencies.usdc,
+              ...parameters
+            }
+          )
 
           console.log(unsignedTransaction)
 
@@ -198,9 +204,19 @@ export default function Panel() {
         <ModalOverlay />
         <ModalContent>
           <ModalBody padding={"20px"}>
-            <Flex justifyContent={"center"} alignItems={"center"} gap="2">
-              <Spinner size="xs" />
-              <Text size={"md"}>Awaiting Confirmation</Text>
+            <Flex
+              direction={"column"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap="2">
+              <Flex justifyContent={"center"} alignItems={"center"} gap="2">
+                <Spinner size="xs" />
+                <Text size={"md"}>Awaiting Confirmation</Text>
+              </Flex>
+              <HStack>
+                <Text>Powered by </Text>
+                <Image width={"45px"} src={glide} />
+              </HStack>
             </Flex>
           </ModalBody>
         </ModalContent>
@@ -210,9 +226,9 @@ export default function Panel() {
         alignItems={"center"}
         width={"100%"}
         gap={"6"}>
-        <Flex gap="2" marginBottom={"20px"}>
-          <img width="24px" src={zorb} />
-          <img width="60px" src={zora} />
+        <Flex gap="2" alignItems={"center"} marginBottom={"20px"}>
+          <img width="24px" src={logoBlack} />
+          <Text fontSize="14px">ZoraCart</Text>
         </Flex>
         {cart ? (
           cart.length ? (

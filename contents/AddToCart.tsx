@@ -8,8 +8,6 @@ import type {
 import { createPublicClient, http, type Address } from "viem"
 import { base } from "viem/chains"
 
-import { useStorage } from "@plasmohq/storage/hook"
-
 export const config: PlasmoCSConfig = {
   matches: ["https://zora.co/collect/base:*"]
 }
@@ -46,6 +44,9 @@ export const getInlineAnchor: PlasmoGetInlineAnchor = async () =>
     'button[data-testid="connect-trigger"].Button_--size-large__2b6m4'
   ) ||
   document.querySelector(
+    'button[data-testid="action-trigger"].Button_--size-large__2b6m4'
+  ) ||
+  document.querySelector(
     'button[data-testid="mint-sale-public"].Button_--size-large__2b6m4'
   )
 
@@ -66,7 +67,6 @@ async function getToken(address, tokenId) {
     includeFullDetails: false // Optional, provides more data on the NFT such as all historical events
   }
   const { token } = await zdk.token(args)
-
   return token
 }
 
@@ -80,11 +80,17 @@ async function getCurrencySymbol(currencyAddress: Address) {
 }
 
 async function constructItemFromToken(token) {
+  console.log(token)
   if (token) {
-    let imageUrl = token.token.image.url
-    imageUrl = imageUrl.replace("ipfs://", "")
-    let imageContentUrl = `https://remote-image.decentralized-content.com/image?url=${encodeURIComponent(`https://magic.decentralized-content.com/ipfs/${imageUrl}`)}&w=640&q=25`
+    let imageRenderer = document.querySelector(
+      'img[data-testid="media-renderer"]'
+    )
 
+    let imageContentUrl = imageRenderer.src
+
+    // let token = await collectorClient.getToken({
+    //   tokenContract: tokenToCSSVar.
+    // })
     const mintCosts = await collectorClient.getMintCosts({
       // 1155 contract address
       collection: token.token.collectionAddress,
@@ -93,8 +99,6 @@ async function constructItemFromToken(token) {
       quantityMinted: 1,
       mintType: "1155"
     })
-
-    console.log(mintCosts)
 
     let item = {
       image: imageContentUrl,
@@ -127,8 +131,6 @@ async function processAddToCart() {
   let [address, tokenId] = link.split("/")
 
   const token = await getToken(address, tokenId)
-
-  console.log("Token", token)
 
   const item = constructItemFromToken(token)
 
