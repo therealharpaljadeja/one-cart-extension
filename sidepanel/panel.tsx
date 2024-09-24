@@ -34,7 +34,7 @@ import {
   useDisconnect,
   usePublicClient
 } from "wagmi"
-import { useSendCalls, useWriteContracts } from "wagmi/experimental"
+import { useSendCalls } from "wagmi/experimental"
 
 import ERC20Abi from "~/utils/ERC20Abi"
 
@@ -103,16 +103,49 @@ export default function Panel() {
         const collectorClient = createCollectorClient({ chainId, publicClient })
         let transactions: any[] = []
 
-        for await (let item of cart) {
+        // for await (let item of cart) {
+        //   let { parameters } = await collectorClient.mint({
+        //     minterAccount: address,
+        //     // collection address to mint
+        //     tokenId: item.tokenId,
+        //     tokenContract: item.collectionAddress,
+        //     // quantity of tokens to mint
+        //     quantityToMint: 1,
+        //     mintReferral: "0x408f46674216bad2f0e3710db6645cf7280f4b02",
+        //     // can be set to 1155, 721, or premint
+        //     mintType: "1155"
+        //   })
+
+        //   // Glide Code
+        //   const { unsignedTransaction, sessionId } = await createSession(
+        //     config,
+        //     {
+        //       chainId: chains.base.id,
+        //       account: address,
+        //       paymentCurrency: currencies.usdc,
+        //       ...parameters
+        //     }
+        //   )
+
+        //   console.log(unsignedTransaction)
+
+        //   let transaction = {
+        //     to: unsignedTransaction.to,
+        //     data: unsignedTransaction.input,
+        //     value: unsignedTransaction.value
+        //   }
+
+        //   // Glide transactions
+        //   transactions.push(transaction)
+        // }
+
+        const promises = cart.map(async (item) => {
           let { parameters } = await collectorClient.mint({
             minterAccount: address,
-            // collection address to mint
             tokenId: item.tokenId,
             tokenContract: item.collectionAddress,
-            // quantity of tokens to mint
             quantityToMint: 1,
             mintReferral: "0x408f46674216bad2f0e3710db6645cf7280f4b02",
-            // can be set to 1155, 721, or premint
             mintType: "1155"
           })
 
@@ -135,9 +168,13 @@ export default function Panel() {
             value: unsignedTransaction.value
           }
 
-          // Glide transactions
-          transactions.push(transaction)
-        }
+          return transaction // Return the transaction for later use
+        })
+
+        // Run all the promises in parallel and collect results
+        transactions = await Promise.all(promises)
+
+        console.log(transactions) // All transactions are available here
 
         if (address) {
           await sendCallsAsync({
@@ -229,8 +266,7 @@ export default function Panel() {
         width={"100%"}
         gap={"6"}>
         <Flex gap="2" alignItems={"center"} marginBottom={"20px"}>
-          <img width="24px" src={logoBlack} />
-          <Text fontSize="14px">ZoraCart</Text>
+          <Text fontSize="20px">OneCart</Text>
         </Flex>
         {cart ? (
           cart.length ? (
@@ -274,9 +310,6 @@ export default function Panel() {
         {cart ? (
           cart.length ? (
             <Flex width="100%" flexDirection={"column"} gap="2">
-              {/* <Button width={"100%"} colorScheme={"red"} onClick={clearCart}>
-                Clear Cart
-              </Button> */}
               <Button
                 padding={"25px 16px"}
                 width={"100%"}
