@@ -11,6 +11,7 @@ Chrome Extension that let's you add Zora NFTs to a cart and then checkout in a s
 - Viem, Wagmi
 - Coinbase Smart Wallet
 - Zora ZDK & Protocol SDK
+- Glide
 
 ## Video Demo
 
